@@ -102,7 +102,7 @@ export default function Footer(): JSX.Element {
                 <span>
                   710, Lakeway Drive, Sunnyvale,
                   <br />
-                  California-94087
+                  California-94087.
                 </span>
               </div>
             </div>
