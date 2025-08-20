@@ -15,17 +15,24 @@ jobs:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ EC2_HOST }}
+          host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ EC2_KEY }}
+          key: ${{ secrets.EC2_KEY }}
           script: |
             cd ~/hado-global-service
-            git reset --hard
+            git fetch --all
+            git reset --hard origin/main
             git pull origin main
+
+            # Install dependencies & build React
             npm install
             npm run build
+
+            # Deploy build files to Apache
             sudo rm -rf /var/www/html/*
             sudo cp -r ~/hado-global-service/dist/spa/* /var/www/html/
+
+            # Restart Apache
             sudo systemctl restart apache2
 
             # 🔹 Renew SSL (safe to run anytime, only renews if needed)
